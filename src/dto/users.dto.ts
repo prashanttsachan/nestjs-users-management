@@ -1,7 +1,11 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { BaseResponse } from "apps/common/src/shared/BaseResponse";
 
 export class UserDto {
+
+	@ApiProperty()
 	userId: string;
+	
 	firstName: string;
 	lastName: string;
 	username: string;
