@@ -1,5 +1,7 @@
-export interface createUserDto {
-	userId: number;
+import { BaseResponse } from "apps/common/src/shared/BaseResponse";
+
+export class UserDto {
+	userId: string;
 	firstName: string;
 	lastName: string;
 	username: string;
@@ -9,11 +11,16 @@ export interface createUserDto {
 	remarks: string;
 	createdAt: Date;
 	updatedAt: Date;
-	deletedAt: Date;
+
+    constructor(partial: Partial<UserDto>) {
+		Object.assign(this, partial);
+	}
+
+    fullName = () => {
+		return `${this.firstName} ${this.lastName}`
+	}
 }
 
-///* "https://json.schemastore.org/nest-cli", */
-
-export class User {
-
+export class UserResponse extends BaseResponse {
+    data: UserDto | Array<UserDto>;
 }
