@@ -1,10 +1,11 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Inject, Param, Post, Put, UseInterceptors } from '@nestjs/common';
-import { User } from 'apps/common/src/entities/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 import { FindOptionsWhere } from 'typeorm';
 import { INTERFACE_ENUM } from '../constants/enum';
-import { UserDto, UserResponse } from '../dto/users.dto';
+import { UserDto, Response } from '../dto/users.dto';
 import { IUserProvider } from '../interfaces/iUser.provider';
 
+@ApiTags('Users')
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
@@ -13,22 +14,22 @@ export class UsersController {
 		private readonly _userProvider: IUserProvider) {}
 
 	@Post('create')
-	createUser(@Body() user: User): Promise<UserResponse> {
+	createUser(@Body() user: UserDto): Promise<Response> {
 		return this._userProvider.create(user);
 	}
 
 	@Get('all')
-	findAll(): Promise<UserResponse> {
+	findAll(): Promise<Response> {
 		return this._userProvider.findAll();
 	}
 
 	@Get(':id')
-	findById(@Param('id') id: string): Promise<UserResponse> {
+	findById(@Param('id') id: string): Promise<Response> {
 		return this._userProvider.findById(id);
 	}
 
 	@Post('filter-by')
-	findBy(@Body() user: FindOptionsWhere<User>): Promise<UserResponse> {
+	findBy(@Body() user: FindOptionsWhere<UserDto>): Promise<Response> {
 		return this._userProvider.findBy(user);
 	}
 

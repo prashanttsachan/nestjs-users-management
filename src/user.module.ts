@@ -1,15 +1,26 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './controllers/users.controller';
 import { UserRepository } from './repositories/user.repository';
-import { MailsModule } from './mails/mails.module';
-import { CommonModule } from 'apps/common/src/common.module';
+import { CommonModule } from 'apps/shared/src/common.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'apps/common/src/entities/user.entity';
+import { User as UserEntity, Mail } from 'apps/user/entities';
 import { INTERFACE_ENUM } from './constants/enum';
 import { UserProvider } from './providers/user.provider';
+import { MailModule } from './mail/mail.module';
+import { DATABASE } from './constants/database';
 
 @Module({
-	imports: [MailsModule, CommonModule, TypeOrmModule.forFeature([User])],
+	imports: [
+		CommonModule, 
+		TypeOrmModule.forRoot({
+			type: 'mysql',
+			...DATABASE,
+			entities: [UserEntity, Mail],
+			synchronize: true,
+		}),
+		TypeOrmModule.forFeature([UserEntity]),
+		MailModule
+	],
 	controllers: [UsersController],
 	providers: [{
 		provide: INTERFACE_ENUM.IUSER_REPOSITORY,
@@ -18,6 +29,6 @@ import { UserProvider } from './providers/user.provider';
 		provide: INTERFACE_ENUM.IUSER_PROVIDER,
 		useClass: UserProvider
 	}],
-	exports:[MailsModule]
+	exports:[MailModule]
 })
-export class Users {}
+export class User {}

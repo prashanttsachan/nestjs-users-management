@@ -1,19 +1,37 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseResponse } from "apps/common/src/shared/BaseResponse";
+import { BaseResponse } from "apps/shared/src/shared/BaseResponse";
+import { MailDto } from "../mail/dto/mail.dto";
 
 export class UserDto {
 
 	@ApiProperty()
 	userId: string;
 	
+	@ApiProperty()
 	firstName: string;
+
+	@ApiProperty()
 	lastName: string;
+
+	@ApiProperty()
 	username: string;
+
+	@ApiProperty()
 	psalt: string;
+
+	@ApiProperty()
   	password: string;
+
+	@ApiProperty()
 	isActive: boolean;
+	
+	@ApiProperty()
 	remarks: string;
+	
+	@ApiProperty()
 	createdAt: Date;
+	
+	@ApiProperty()
 	updatedAt: Date;
 
     constructor(partial: Partial<UserDto>) {
@@ -25,6 +43,6 @@ export class UserDto {
 	}
 }
 
-export class UserResponse extends BaseResponse {
-    data: UserDto | Array<UserDto>;
+export class Response<T = UserDto | Array<UserDto> | MailDto | MailDto[]> extends BaseResponse {
+    data: T;
 }

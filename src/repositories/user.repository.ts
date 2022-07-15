@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User as UserEntity } from 'apps/common/src/entities/user.entity';
+import { User as UserEntity } from 'apps/user/entities';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { UserDto, UserResponse } from '../dto/users.dto';
+import { UserDto, Response } from '../dto/users.dto';
 import { IUserRepository } from '../interfaces/iUser.repository';
 
 @Injectable()
@@ -12,8 +12,8 @@ export class UserRepository implements IUserRepository{
 		private usersRepo: Repository<UserEntity>,
 	) {}
 
-	create = async (user: UserEntity): Promise<UserResponse> => {
-		const response: UserResponse = new UserResponse();
+	create = async (user: UserDto): Promise<Response> => {
+		const response: Response<UserDto> = new Response();
 		try {
 			const savedUser = await this.usersRepo.save(user);
 			if (!savedUser) 
@@ -27,11 +27,10 @@ export class UserRepository implements IUserRepository{
 		return response;
 	}
 	
-	findById = async (id: string): Promise<UserResponse> => {
-		const response: UserResponse = new UserResponse();
+	findById = async (id: string): Promise<Response> => {
+		const response: Response<UserDto> = new Response();
 		try {
 			const user = await this.usersRepo.findOneBy({userId: id});
-			console.log(user, id);
 			if (!user) 
 				throw('Unable to fetch the data');
 			response.data = user;
@@ -43,8 +42,8 @@ export class UserRepository implements IUserRepository{
 		return response;
 	}
 
-	findAll = async (): Promise<UserResponse> => {
-		const response: UserResponse = new UserResponse();
+	findAll = async (): Promise<Response> => {
+		const response: Response<UserDto[]> = new Response();
 		try {
 			const user = await this.usersRepo.find();
 			if (!user) 
@@ -58,8 +57,8 @@ export class UserRepository implements IUserRepository{
 		return response;
 	}
 
-	findBy = async (options: FindOptionsWhere<UserDto>): Promise<UserResponse> => {
-		const response: UserResponse = new UserResponse();
+	findBy = async (options: FindOptionsWhere<UserDto>): Promise<Response> => {
+		const response: Response<UserDto[]> = new Response();
 		try {
 			const user = await this.usersRepo.findBy(options);
 			if (!user) 

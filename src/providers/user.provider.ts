@@ -1,8 +1,7 @@
 import { Inject } from "@nestjs/common";
-import { User as UserEntity } from "apps/common/src/entities/user.entity";
 import { FindOptionsWhere } from "typeorm";
 import { INTERFACE_ENUM } from "../constants/enum";
-import { UserDto, UserResponse } from "../dto/users.dto";
+import { UserDto, Response } from "../dto/users.dto";
 import { IUserProvider } from "../interfaces/iUser.provider";
 import { IUserRepository } from "../interfaces/iUser.repository";
 
@@ -12,19 +11,19 @@ export class UserProvider implements IUserProvider {
         private readonly _userRepo: IUserRepository
     ) {}
 
-    create = async (user: UserEntity): Promise<UserResponse> => {
+    create = async (user: UserDto): Promise<Response> => {
 		return await this._userRepo.create(user);
 	}
 	
-	findById = async (userId: string): Promise<UserResponse> => {
+	findById = async (userId: string): Promise<Response> => {
 		return await this._userRepo.findById(userId);
 	}
 
-	findAll = async (): Promise<UserResponse> => {
+	findAll = async (): Promise<Response> => {
 		return await this._userRepo.findAll();
 	}
 
-	findBy = async (options: FindOptionsWhere<UserDto>): Promise<UserResponse> => {
+	findBy = async (options: FindOptionsWhere<UserDto>): Promise<Response> => {
 		return await this._userRepo.findBy(options);
 	}
 
